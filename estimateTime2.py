@@ -3,7 +3,7 @@ import math
 import numpy as np
 import tkinter as tk
 
-def display(hour, minute):
+def display(hour, minute, crop):
     canvas = tk.Tk()
     canvas.title("Analog to Digital")
     canvas.geometry("300x250")
@@ -13,6 +13,10 @@ def display(hour, minute):
     value = "{}:{:02d}".format(hour, minute)
     digit.config(text=value)
     canvas.mainloop()
+
+    cv2.imshow("Crop", crop)  # crop を表示する
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 def calculate_theta(xcenter, ycenter, x1, y1, x2, y2):
     l1 = math.sqrt(((xcenter - x1) ** 2) + ((ycenter - y1) ** 2))
@@ -136,9 +140,9 @@ def find_needles(crop):
             break
 
     hour, minute = estimate_time_from_needle_info(width / 2, height / 2, xs1, ys1, xs2, ys2, xl1, yl1, xl2, yl2)
-    display(hour, minute)
+    display(hour, minute, crop)
 
-process_image('./clock/clock1.jpg')
-process_image('./clock/clock2.jpg')
-process_image('./clock/clock3.jpg')
-process_image('./clock/clock4.jpg')
+for _ in range(4):
+    text = './clock/clock' + str(_ + 1) + '.jpg'
+    process_image(text)
+    
